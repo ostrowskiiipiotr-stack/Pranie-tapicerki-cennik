@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cennik Usług Czyszczenia – Piotr Ostrowski GlanzWerk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Reset i podstawowe style */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            color: #e0e0e0;
+            line-height: 1.7;
+            padding: 40px 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(17, 17, 17, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 
+                        0 0 30px rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Flagi językowe */
+        #flags {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 215, 0, 0.05);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .flag {
+            font-size: 2em;
+            margin: 0 15px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            padding: 10px;
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .flag:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .language-content {
+            display: none;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .language-content.active {
+            display: block;
+        }
+
+        /* Nagłówki */
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: #ffd700;
+            font-size: 3rem;
+            text-align: center;
+            padding: 40px 20px 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, #ffd700, transparent);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .company-name {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #ffd700;
+            padding: 0 20px 30px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        h3 {
+            color: #ffd700;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            padding: 10px 30px;
+            position: relative;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        h3::before {
+            content: '✦';
+            position: absolute;
+            left: 10px;
+            font-size: 1.2rem;
+            color: #ffd700;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 12px rgba(255, 215, 0, 0.6); }
+            to { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.4); }
+        }
+
+        /* Tabele – przerobione na Grid dla premium looku */
+        .price-section {
+            display: grid;
+            gap: 1px;
+            background: #1a1a1a;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 20px 0 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .price-header {
+            background: linear-gradient(to bottom, #2a2a2a, #222);
+            color: #ffd700;
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 2px solid #ffd700;
+        }
+
+        .price-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 16px 20px;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #333;
+        }
+
+        .price-row:hover {
+            background: linear-gradient(to right, #222, #2a2a2a);
+            transform: translateX(5px);
+            box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.1);
+        }
+
+        .price-row:last-child {
+            border-bottom: none;
+        }
+
+        .price-item {
+            padding: 4px 0;
+            font-size: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Lista */
+        ul {
+            list-style: none;
+            padding: 0 30px 40px;
+            margin: 20px 0;
+        }
+
+        ul li {
+            padding: 12px 0;
+            position: relative;
+            padding-left: 30px;
+            font-size: 1rem;
+            border-bottom: 1px dashed rgba(255, 215, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        ul li:hover {
+            padding-left: 35px;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+        }
+
+        ul li:last-child {
+            border-bottom: none;
+        }
+
+        ul li::before {
+            content: '✦';
+            color: #ffd700;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            transition: transform 0.3s ease;
+        }
+
+        ul li:hover::before {
+            transform: scale(1.2);
+        }
+
+        /* CTA Sekcja */
+        .cta-section {
+            background: linear-gradient(to bottom, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .cta-phone {
+            font-size: 1.2rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin: 10px 10px 0 0;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-button.phone {
+            background: linear-gradient(to right, #ffd700, #ffed4e);
+            color: #111;
+        }
+
+        .cta-button.mail {
+            background: linear-gradient(to right, #28a745, #20c997);
+            color: #fff;
+        }
+
+        .cta-button.mail:hover {
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.6);
+        }
+
+        .cta-button.insta {
+            background: linear-gradient(to right, #e1306c, #fd1d1d, #fcaf45);
+            color: #fff;
+        }
+
+        .cta-button.insta:hover {
+            box-shadow: 0 8px 25px rgba(225, 48, 108, 0.6);
+        }
+
+        /* Stopka */
+        .footer-note {
+            text-align: center;
+            padding: 30px 20px;
+            font-style: italic;
+            color: #aaa;
+            background: #0a0a0a;
+            border-top: 1px solid #333;
+            font-size: 1rem;
+        }
+
+        /* Responsywność */
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            h2 { font-size: 2.2rem; padding: 30px 15px 10px; }
+            .company-name { font-size: 1.2rem; padding: 0 15px 20px; }
+            h3 { font-size: 1.5rem; padding: 10px 20px; }
+            .price-header, .price-row { 
+                grid-template-columns: 1fr; 
+                gap: 10px;
+                padding: 15px 20px;
+            }
+            .price-item { font-size: 0.95rem; }
+            ul li { font-size: 0.95rem; padding-left: 25px; }
+            .cta-section { padding: 20px; }
+            .cta-button { display: block; margin: 10px auto; }
+            .flag { font-size: 1.5em; margin: 0 10px; padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="flags">
+            <span class="flag" onclick="setLanguage('pl'); return false;" title="Polski">🇵🇱</span>
+            <span class="flag" onclick="setLanguage('de'); return false;" title="Deutsch">🇩🇪</span>
+            <span class="flag" onclick="setLanguage('en'); return false;" title="English">🇬🇧</span>
+        </div>
+
+        <!-- Treść po polsku -->
+        <div id="content-pl" class="language-content active">
+            <h2>Cennik Usług Czyszczenia</h2>
+            <p class="company-name">Piotr Ostrowski GlanzWerk</p>
+            
+            <h3>Meble Tapicerowane</h3>
+            <div class="price-section">
+                <div class="price-header">
+                    <div>Usługa</div>
+                    <div>Cena (€)</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Krzesło jadalniane (niższa cena przy większej ilości)</div>
+                    <div class="price-item">15-20</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Fotel</div>
+                    <div class="price-item">40-60</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Sofa / Kanapa 2-osobowa</div>
+                    <div class="price-item">60-80</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Sofa / Kanapa 3-osobowa</div>
+                    <div class="price-item">80-100</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Narożnik</div>
+                    <div class="price-item">90-120</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Materace</div>
+                    <div class="price-item">30-100</div>
+                </div>
+            </div>
+            
+            <h3>Dywany i Wykładziny</h3>
+            <div class="price-section">
+                <div class="price-header">
+                    <div>Usługa</div>
+                    <div>Cena (€)</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Dywan</div>
+                    <div class="price-item">10-18 / m² (np. dywan 2x3 m: 60-108)</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Dodatek za dywany shaggy / wełniane</div>
+                    <div class="price-item">+20% za trudność</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Wykładzina</div>
+                    <div class="price-item">8-12 / m²</div>
+                </div>
+            </div>
+            
+            <h3>Dodatki</h3>
+            <ul>
+                <li>Dojazd w Hamburgu i okolicach: Gratis</li>
+                <li>Usuwanie plam / zapachów zwierzęcych: 20-40 €</li>
+                <li>Suszenie mebli: 10-50 €</li>
+                <li>Pakiety: Np. sofa + 2 fotele za 150 € (zniżka 10-20%), dywan + sofa za łączną niższą cenę</li>
+            </ul>
+            
+            <div class="cta-section">
+                <p style="margin-bottom: 15px; font-size: 1.1rem;">Ceny mogą być dostosowane w zależności od specyfiki zlecenia.</p>
+                <div class="cta-phone">+49 176 41528287</div>
+                <a href="tel:+4917641528287" class="cta-button phone">Zadzwoń teraz!</a>
+                <a href="mailto:glanzwerkk@gmail.com?subject=Zapytanie o czyszczenie" class="cta-button mail">Wyślij e-mail</a>
+                <a href="https://www.instagram.com/glanz__werk/" target="_blank" rel="noopener noreferrer" class="cta-button insta">Obserwuj na Instagramie</a>
+            </div>
+            
+            <p class="footer-note">Profesjonalne czyszczenie z dbałością o detale. © Piotr Ostrowski GlanzWerk</p>
+        </div>
+
+        <!-- Treść po niemiecku -->
+        <div id="content-de" class="language-content">
+            <h2>Preisliste Reinigungsdienste</h2>
+            <p class="company-name">Piotr Ostrowski GlanzWerk</p>
+            
+            <h3>Polstermöbel</h3>
+            <div class="price-section">
+                <div class="price-header">
+                    <div>Dienstleistung</div>
+                    <div>Preis (€)</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Esszimmerstuhl (niedrigerer Preis bei größeren Mengen)</div>
+                    <div class="price-item">15-20</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Sessel</div>
+                    <div class="price-item">40-60</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Sofa / Couch 2-Sitzer</div>
+                    <div class="price-item">60-80</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Sofa / Couch 3-Sitzer</div>
+                    <div class="price-item">80-100</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Ecksofa</div>
+                    <div class="price-item">90-120</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Matratzen</div>
+                    <div class="price-item">30-100</div>
+                </div>
+            </div>
+            
+            <h3>Teppiche und Bodenbeläge</h3>
+            <div class="price-section">
+                <div class="price-header">
+                    <div>Dienstleistung</div>
+                    <div>Preis (€)</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Teppich</div>
+                    <div class="price-item">10-18 / m² (z.B. Teppich 2x3 m: 60-108)</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Zuschlag für Shaggy- / Wollteppiche</div>
+                    <div class="price-item">+20% für Schwierigkeit</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Teppichboden</div>
+                    <div class="price-item">8-12 / m²</div>
+                </div>
+            </div>
+            
+            <h3>Zusätze</h3>
+            <ul>
+                <li>Anfahrt in Hamburg und Umgebung: Kostenlos</li>
+                <li>Fleckentfernung / Tiergeruch: 20-40 €</li>
+                <li>Trocknen von Möbeln: 10-50 €</li>
+                <li>Pakete: Z.B. Sofa + 2 Sessel für 150 € (Rabatt 10-20%), Teppich + Sofa zu reduziertem Gesamtpreis</li>
+            </ul>
+            
+            <div class="cta-section">
+                <p style="margin-bottom: 15px; font-size: 1.1rem;">Preise können je nach Auftragsart angepasst werden.</p>
+                <div class="cta-phone">+49 176 41528287</div>
+                <a href="tel:+4917641528287" class="cta-button phone">Jetzt anrufen!</a>
+                <a href="mailto:glanzwerkk@gmail.com?subject=Anfrage Reinigung" class="cta-button mail">E-Mail senden</a>
+                <a href="https://www.instagram.com/glanz__werk/" target="_blank" rel="noopener noreferrer" class="cta-button insta">Auf Instagram folgen</a>
+            </div>
+            
+            <p class="footer-note">Professionelle Reinigung mit Liebe zum Detail. © Piotr Ostrowski GlanzWerk</p>
+        </div>
+
+        <!-- Treść po angielsku -->
+        <div id="content-en" class="language-content">
+            <h2>Cleaning Services Price List</h2>
+            <p class="company-name">Piotr Ostrowski GlanzWerk</p>
+            
+            <h3>Upholstered Furniture</h3>
+            <div class="price-section">
+                <div class="price-header">
+                    <div>Service</div>
+                    <div>Price (€)</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Dining Chair (lower price for larger quantities)</div>
+                    <div class="price-item">15-20</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Armchair</div>
+                    <div class="price-item">40-60</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Sofa / Couch 2-Seater</div>
+                    <div class="price-item">60-80</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Sofa / Couch 3-Seater</div>
+                    <div class="price-item">80-100</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Corner Sofa</div>
+                    <div class="price-item">90-120</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Mattresses</div>
+                    <div class="price-item">30-100</div>
+                </div>
+            </div>
+            
+            <h3>Carpets and Floor Coverings</h3>
+            <div class="price-section">
+                <div class="price-header">
+                    <div>Service</div>
+                    <div>Price (€)</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Carpet</div>
+                    <div class="price-item">10-18 / m² (e.g. carpet 2x3 m: 60-108)</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Surcharge for shaggy / wool carpets</div>
+                    <div class="price-item">+20% for difficulty</div>
+                </div>
+                <div class="price-row">
+                    <div class="price-item">Carpet Flooring</div>
+                    <div class="price-item">8-12 / m²</div>
+                </div>
+            </div>
+            
+            <h3>Add-ons</h3>
+            <ul>
+                <li>Travel in Hamburg and surroundings: Free</li>
+                <li>Stain removal / pet odors: 20-40 €</li>
+                <li>Drying furniture: 10-50 €</li>
+                <li>Packages: E.g. sofa + 2 armchairs for 150 € (discount 10-20%), carpet + sofa at reduced total price</li>
+            </ul>
+            
+            <div class="cta-section">
+                <p style="margin-bottom: 15px; font-size: 1.1rem;">Prices may be adjusted depending on the specifics of the order.</p>
+                <div class="cta-phone">+49 176 41528287</div>
+                <a href="tel:+4917641528287" class="cta-button phone">Call now!</a>
+                <a href="mailto:glanzwerkk@gmail.com?subject=Cleaning Inquiry" class="cta-button mail">Send email</a>
+                <a href="https://www.instagram.com/glanz__werk/" target="_blank" rel="noopener noreferrer" class="cta-button insta">Follow on Instagram</a>
+            </div>
+            
+            <p class="footer-note">Professional cleaning with attention to detail. © Piotr Ostrowski GlanzWerk</p>
+        </div>
+    </div>
+
+    <script>
+        function setLanguage(lang) {
+            // Ukryj wszystkie sekcje
+            const contents = document.querySelectorAll('.language-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Pokaż wybraną
+            document.getElementById('content-' + lang).classList.add('active');
+            
+            // Opcjonalnie: zmień lang html
+            document.documentElement.lang = lang;
+        }
+    </script>
+</body>
+</html>
